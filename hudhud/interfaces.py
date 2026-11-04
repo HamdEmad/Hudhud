@@ -61,3 +61,4 @@ class SearchCache(Protocol):
     def clear(self) -> None:
         """Evict all cached entries."""
         ...
+

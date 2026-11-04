@@ -70,3 +70,4 @@ class JinaProvider(BaseProvider):
             )
 
         return results
+

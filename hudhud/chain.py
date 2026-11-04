@@ -307,3 +307,4 @@ class Hudhud:
         Execute the search pipeline asynchronously via thread pool.
         """
         return await asyncio.to_thread(self.fly)
+

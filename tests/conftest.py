@@ -84,3 +84,4 @@ def sample_results() -> List[SearchResult]:
             rank=3,
         ),
     ]
+

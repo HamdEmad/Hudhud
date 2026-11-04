@@ -1,5 +1,6 @@
 """
-DuckDuckGo search provider adapter (free web scraping via ddgs).
+DuckDuckGo search provider adapter (free web search via ddgs).
+Supports multi-engine backends: duckduckgo, brave, yandex, startpage, yahoo, wikipedia, mojeek, grokipedia, auto.
 Requires no API keys.
 """
 
@@ -15,19 +16,37 @@ from hudhud.providers.base import BaseProvider
 
 
 class DuckDuckGoProvider(BaseProvider):
-    """DuckDuckGo provider using the ddgs library."""
+    """
+    DuckDuckGo / Open Search provider using the ddgs library.
+
+    Supports custom engine backends via the `backend` argument:
+        - 'auto' (default: pools and shuffles available free engines)
+        - 'duckduckgo'
+        - 'brave'
+        - 'yandex'
+        - 'wikipedia'
+        - 'startpage'
+        - 'yahoo'
+        - 'mojeek'
+        - 'grokipedia'
+    """
+
+    def __init__(self, backend: str = "auto") -> None:
+        self.backend = (backend or "auto").strip().lower()
 
     @property
     def name(self) -> str:
-        return "duckduckgo"
+        if self.backend in ("auto", "duckduckgo"):
+            return "duckduckgo"
+        return f"duckduckgo:{self.backend}"
 
     def _execute_search(self, query: SearchQuery) -> Sequence[SearchResult]:
         try:
             # ddgs DDGS().text() returns an iterable of result dicts
-            raw_items = DDGS().text(query.text, max_results=query.limit)
+            raw_items = DDGS().text(query.text, backend=self.backend, max_results=query.limit)
             items = list(raw_items)
         except Exception as e:
-            raise ProviderError(self.name, f"DuckDuckGo search failed: {e}", original_exception=e) from e
+            raise ProviderError(self.name, f"Search failed via [{self.backend}]: {e}", original_exception=e) from e
 
         results: list[SearchResult] = []
         for item in items:

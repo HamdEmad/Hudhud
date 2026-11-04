@@ -51,3 +51,4 @@ class AllProvidersExhaustedError(HudhudError):
         )
         self.query_text = query_text
         self.attempted_providers = attempted_providers
+

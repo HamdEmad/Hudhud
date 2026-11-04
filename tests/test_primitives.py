@@ -110,3 +110,4 @@ def test_empty_search_response(sample_query):
     assert resp.first() is None
     assert resp.urls == ()
     assert resp.error == "All providers failed"
+

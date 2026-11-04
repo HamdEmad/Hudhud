@@ -107,3 +107,4 @@ class BaseProvider(abc.ABC, SearchProvider):
             )
 
         return final_results
+

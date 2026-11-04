@@ -41,38 +41,50 @@ def create_provider(
     key = name.strip().lower()
     cfg = config or ProviderConfig.from_env()
 
+    def _get_credential(param: str, env_val: Optional[str]) -> Optional[str]:
+        if param in kwargs:
+            val = kwargs[param]
+            return val.strip() if val and val.strip() else None
+        return env_val
+
     if key in ("google_cse", "google", "cse"):
-        api_key = kwargs.get("api_key") or cfg.google_cse_api_key
-        cx = kwargs.get("cx") or cfg.google_cse_cx
+        api_key = _get_credential("api_key", cfg.google_cse_api_key)
+        cx = _get_credential("cx", cfg.google_cse_cx)
         if api_key and cx:
             return GoogleCSEProvider(api_key=api_key, cx=cx)
         return None
 
     if key in ("serpapi", "serp"):
-        api_key = kwargs.get("api_key") or cfg.serp_api_key
+        api_key = _get_credential("api_key", cfg.serp_api_key)
         if api_key:
             return SerpAPIProvider(api_key=api_key)
         return None
 
     if key in ("tavily",):
-        api_key = kwargs.get("api_key") or cfg.tavily_api_key
+        api_key = _get_credential("api_key", cfg.tavily_api_key)
         if api_key:
             return TavilyProvider(api_key=api_key)
         return None
 
     if key in ("firecrawl",):
-        api_key = kwargs.get("api_key") or cfg.firecrawl_api_key
+        api_key = _get_credential("api_key", cfg.firecrawl_api_key)
         if api_key:
             return FirecrawlProvider(api_key=api_key)
         return None
 
     if key in ("duckduckgo", "ddg"):
-        return DuckDuckGoProvider()
+        backend = kwargs.get("backend", "auto")
+        return DuckDuckGoProvider(backend=backend)
+
+    # Free open search engine backends powered by ddgs
+    if key in ("brave", "yandex", "startpage", "wikipedia", "mojeek", "yahoo", "grokipedia"):
+        return DuckDuckGoProvider(backend=key)
 
     if key in ("jina",):
-        api_key = kwargs.get("api_key") or cfg.jina_api_key
+        api_key = _get_credential("api_key", cfg.jina_api_key)
         if api_key:
             return JinaProvider(api_key=api_key)
         return None
 
     raise ValueError(f"Unknown search provider: '{name}'")
+

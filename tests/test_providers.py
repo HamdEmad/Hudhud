@@ -22,6 +22,13 @@ def test_provider_factory():
     assert ddg is not None
     assert ddg.name == "duckduckgo"
 
+    # Multi-engine open backends via ddgs
+    for engine_name in ("brave", "yandex", "wikipedia", "startpage", "mojeek", "yahoo", "grokipedia"):
+        provider = create_provider(engine_name)
+        assert provider is not None
+        assert provider.name == f"duckduckgo:{engine_name}"
+        assert isinstance(provider, DuckDuckGoProvider)
+
     # Missing keys return None
     assert create_provider("google_cse", api_key="", cx="") is None
     assert create_provider("serpapi", api_key="") is None
@@ -162,3 +169,4 @@ def test_jina_provider_success(mock_get):
     assert len(results) == 1
     assert results[0].title == "Jina Result"
     assert results[0].provider == "jina"
+

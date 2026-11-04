@@ -117,3 +117,4 @@ class SqliteCache(SearchCache):
         with self._lock, self._get_connection() as conn:
             conn.execute("DELETE FROM hudhud_cache")
             conn.commit()
+

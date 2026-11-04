@@ -70,3 +70,4 @@ class SerpAPIProvider(BaseProvider):
             )
 
         return results
+

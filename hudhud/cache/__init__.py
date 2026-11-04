@@ -58,3 +58,4 @@ def deserialize_results(json_str: str) -> list[SearchResult]:
         )
         for item in raw_list
     ]
+

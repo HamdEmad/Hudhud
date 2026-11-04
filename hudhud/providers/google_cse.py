@@ -69,3 +69,4 @@ class GoogleCSEProvider(BaseProvider):
             )
 
         return results
+

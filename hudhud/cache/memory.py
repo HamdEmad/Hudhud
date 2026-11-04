@@ -68,3 +68,4 @@ class MemoryCache(SearchCache):
     def clear(self) -> None:
         with self._lock:
             self._store.clear()
+

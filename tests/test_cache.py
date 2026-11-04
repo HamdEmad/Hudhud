@@ -88,3 +88,4 @@ def test_sqlite_cache_clear(tmp_path, sample_query, sample_results):
 
     cache.clear()
     assert cache.get(sample_query, "google_cse") is None
+

@@ -155,3 +155,4 @@ class SearchResponse:
     def urls(self) -> Tuple[str, ...]:
         """Return a tuple of all result URLs in rank order."""
         return tuple(r.url for r in self.results)
+

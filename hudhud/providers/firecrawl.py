@@ -72,3 +72,4 @@ class FirecrawlProvider(BaseProvider):
             )
 
         return results
+
